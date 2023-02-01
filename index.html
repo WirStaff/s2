@@ -28,7 +28,7 @@
 			renderResult(response);
 		});
 		
-		const calcOrder = async (order) => {
+		const calcOrder = async order => {
 			try {
 				const response = await fetch('/handler.php?' + new URLSearchParams({
 					order
@@ -40,7 +40,7 @@
 			}
 		}
 		
-		const renderResult = (result) => {
+		const renderResult = result => {
 			const resultElement = document.getElementById('result');
 			let text = '';
 			

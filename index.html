@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Калькулятор ящиков</title>
+	</head>
+	
+	<body>
+		<form id="form">
+			<label for="order">Количество бутылок</label>
+			<input type="number" value="0" name="order" />
+			<button>Посчитать</button>
+		</form>
+		<p>Результат: <span id="result"></span></p>
+	</body>
+	<script>
+		const form = document.getElementById('form');
+		
+		form.addEventListener('submit', async e => {
+			e.preventDefault();
+			
+			const order = Number(form.elements['order'].value);
+			
+			if (!order) {
+				return;
+			}
+			
+			const response = await calcOrder(order);
+			renderResult(response);
+		});
+		
+		const calcOrder = async (order) => {
+			try {
+				const response = await fetch('/handler.php?' + new URLSearchParams({
+					order
+				}));
+				
+				return await response.json();
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		
+		const renderResult = (result) => {
+			const resultElement = document.getElementById('result');
+			let text = '';
+			
+			const packages = result.packages;
+			const data = result.data;
+			
+			data.forEach((v, i) => {
+				if (v) {
+					text += `${v} ящик на ${packages[i]} бутылок `;
+				}
+			});
+			
+			resultElement.innerHTML = text;
+		}
+	</script>
+</html>
